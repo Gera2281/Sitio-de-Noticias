@@ -24,7 +24,7 @@
                 <img src="{{ asset('img/Deporte.jpeg') }}" class="d-block w-100" style="height: 500px; object-fit: cover;" alt="Deporte">
                 <div class="container">
                     <div class="carousel-caption">
-                        <h1>Deporte que practicoo</h1>
+                        <h1>Deporte que practico</h1>
                         <p>El béisbol es mi pasión, me gusta jugarlo con mis amigos.</p>
                     </div>
                 </div>
