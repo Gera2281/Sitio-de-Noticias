@@ -9,6 +9,7 @@ use App\Models\Deporte;
 use App\Models\Tecnologia;
 use App\Models\Internacional;
 use App\Models\Clima;
+use App\Models\Local;
 
 class TareaController
 {
@@ -103,6 +104,28 @@ class TareaController
         $clima->save();
 
         return redirect()->route('clima.index');
+    }
+
+    public function locales()   
+    {
+        $locales = Local::all();
+        return view('locales.index', compact('locales'));
+    }
+
+    public function createLocal()   
+    {
+        return view('locales.create');
+    }
+
+    public function agregarLocal(Request $request)
+    {
+        $local = new Local();
+        $local->imagen = $request->imagen;
+        $local->titulo = $request->titulo;
+        $local->descripcion = $request->descripcion;
+        $local->save();
+
+        return redirect()->route('locales.index');
     }
 
     public function productos()
