@@ -34,7 +34,7 @@ class TareaController
         $deporte->descripcion = $request->descripcion;
         $deporte->save();
 
-        return redirect()->route('deportes');
+        return redirect()->route('deportes.index');
     }
 
     public function tecnologia()
@@ -56,7 +56,7 @@ class TareaController
         $tecnologia->descripcion = $request->descripcion;
         $tecnologia->save();
 
-        return redirect()->route('tecnologia');
+        return redirect()->route('tecnologia.index');
     }
 
     public function productos()
