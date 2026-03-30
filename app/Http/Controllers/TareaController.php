@@ -8,6 +8,7 @@ use App\Models\Producto;
 use App\Models\Deporte;
 use App\Models\Tecnologia;
 use App\Models\Internacional;
+use App\Models\Clima;
 
 class TareaController
 {
@@ -80,6 +81,28 @@ class TareaController
         $internacional->save();
 
         return redirect()->route('internacionales.index');
+    }
+
+    public function clima()
+    {
+        $clima = Clima::all();
+        return view('clima.index', compact('clima'));
+    }
+
+    public function createClima()   
+    {
+        return view('clima.create');
+    }
+
+    public function agregarClima(Request $request)
+    {
+        $clima = new Clima();
+        $clima->imagen = $request->imagen;
+        $clima->titulo = $request->titulo;
+        $clima->descripcion = $request->descripcion;
+        $clima->save();
+
+        return redirect()->route('clima.index');
     }
 
     public function productos()

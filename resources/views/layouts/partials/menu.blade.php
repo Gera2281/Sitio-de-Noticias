@@ -6,8 +6,8 @@
             <a class="text-white me-3" href="{{ url('/deportes') }}">Deportes</a>
             <a class="text-white me-3" href="{{ url('/tecnologia') }}">Tecnología</a>
             <a class="text-white me-3" href="{{ url('/internacionales') }}">Noticias Internacionales</a>
+            <a class="text-white me-3" href="{{ url('/clima') }}">Clima</a>
             <a class="text-white me-3" href="{{ url('/productos') }}">Productos</a>
-            <a class="text-white me-3" href="{{ url('/productos') }}">Clima</a>
             <a class="text-white me-3" href="{{ url('/productos') }}">Noticias Locales</a>
 
             
