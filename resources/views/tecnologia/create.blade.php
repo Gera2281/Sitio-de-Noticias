@@ -1,11 +1,11 @@
 @extends('layouts.base')
 
-@section('titulo', 'Deportes')
+@section('titulo', 'Tecnologia')
 
 @section('contenido')
     <h2 class="text-center mb-4">Nueva noticia</h2>
     <div class="container mt-4">
-        <form action="{{ route('deportes.agg') }}" method="POST">
+        <form action="{{ route('tecnologia.agg') }}" method="POST">
             @csrf
             <div class="mb-3">
                 <label for="imagen" class="form-label">Imagen</label>

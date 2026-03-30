@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\Tarea;
 use App\Models\Producto;
 use App\Models\Deporte;
+use App\Models\Tecnologia;
 
 class TareaController
 {
@@ -34,6 +35,28 @@ class TareaController
         $deporte->save();
 
         return redirect()->route('deportes');
+    }
+
+    public function tecnologia()
+    {
+        $tecnologia = Tecnologia::all();
+        return view('tecnologia.index', compact('tecnologia'));
+    }
+
+    public function createTecnologia()   
+    {
+        return view('tecnologia.create');
+    }
+
+    public function agregarTecnologia(Request $request)
+    {
+        $tecnologia = new Tecnologia();
+        $tecnologia->imagen = $request->imagen;
+        $tecnologia->titulo = $request->titulo;
+        $tecnologia->descripcion = $request->descripcion;
+        $tecnologia->save();
+
+        return redirect()->route('tecnologia');
     }
 
     public function productos()
