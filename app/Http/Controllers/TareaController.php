@@ -7,6 +7,7 @@ use App\Models\Tarea;
 use App\Models\Producto;
 use App\Models\Deporte;
 use App\Models\Tecnologia;
+use App\Models\Internacional;
 
 class TareaController
 {
@@ -57,6 +58,28 @@ class TareaController
         $tecnologia->save();
 
         return redirect()->route('tecnologia.index');
+    }
+
+    public function internacionales()
+    {
+        $internacionales = Internacional::all();
+        return view('internacionales.index', compact('internacionales'));
+    }
+
+    public function createInternacional()   
+    {
+        return view('internacionales.create');
+    }
+
+    public function agregarInternacional(Request $request)
+    {
+        $internacional = new Internacional();
+        $internacional->imagen = $request->imagen;
+        $internacional->titulo = $request->titulo;
+        $internacional->descripcion = $request->descripcion;
+        $internacional->save();
+
+        return redirect()->route('internacionales.index');
     }
 
     public function productos()
