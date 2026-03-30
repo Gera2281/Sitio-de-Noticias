@@ -5,12 +5,35 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Tarea;
 use App\Models\Producto;
+use App\Models\Deporte;
 
 class TareaController
 {
     public function inicio()
     {
         return view('Inicio');
+    }
+
+    public function deportes()
+    {
+        $deportes = Deporte::all();
+        return view('deportes.index', compact('deportes'));
+    }
+
+    public function createDeporte()   
+    {
+        return view('deportes.create');
+    }
+
+    public function agregarDeporte(Request $request)
+    {
+        $deporte = new Deporte();
+        $deporte->imagen = $request->imagen;
+        $deporte->titulo = $request->titulo;
+        $deporte->descripcion = $request->descripcion;
+        $deporte->save();
+
+        return redirect()->route('deportes');
     }
 
     public function productos()

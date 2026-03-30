@@ -1,6 +1,6 @@
 @extends('layouts.base')
 
-@section('titulo', 'Inicio - Jose Gerardo')
+@section('titulo', 'Inicio')
 
 @section('contenido')
     <div id="myCarousel" class="carousel slide mb-6" data-bs-ride="carousel">
@@ -8,14 +8,18 @@
             <button type="button" data-bs-target="#myCarousel" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
             <button type="button" data-bs-target="#myCarousel" data-bs-slide-to="1" aria-label="Slide 2"></button>
             <button type="button" data-bs-target="#myCarousel" data-bs-slide-to="2" aria-label="Slide 3"></button>
+            <button type="button" data-bs-target="#myCarousel" data-bs-slide-to="3" aria-label="Slide 4"></button>
+            <button type="button" data-bs-target="#myCarousel" data-bs-slide-to="4" aria-label="Slide 5"></button>
+            <button type="button" data-bs-target="#myCarousel" data-bs-slide-to="5" aria-label="Slide 6"></button>
+
         </div>
         <div class="carousel-inner">
             <div class="carousel-item active">
                 <img src="{{ asset('img/musica.jpeg') }}" class="d-block w-100" style="height: 500px; object-fit: cover;" alt="Musica">
                 <div class="container">
-                    <div class="carousel-caption text-start text-dark">
-                        <h1 class="bg-white d-inline-block px-2">Música favorita.</h1>
-                        <p class="bg-white d-inline-block px-2">Mi música se basa en ritmo, no tengo un género favorito.</p>
+                    <div class="carousel-caption text-white">
+                        <h1 >Aqui encontraras las noticias mas importantes.</h1>
+                        <p >Elige la seccion que desees ver</p>
                     </div>
                 </div>
             </div>
@@ -24,18 +28,48 @@
                 <img src="{{ asset('img/Deporte.jpeg') }}" class="d-block w-100" style="height: 500px; object-fit: cover;" alt="Deporte">
                 <div class="container">
                     <div class="carousel-caption">
-                        <h1>Deporte que practico</h1>
-                        <p>El béisbol es mi pasión, me gusta jugarlo con mis amigos.</p>
+                        <h1>Deportes</h1>
+                        <p>Aqui encontraras las noticias mas recientes acerca del deporte</p>
                     </div>
                 </div>
             </div>
 
             <div class="carousel-item">
-                <img src="{{ asset('img/logo.png') }}" class="d-block w-100" style="height: 500px; object-fit: cover;" alt="Tec">
+                <img src="{{ asset('img/logo.png') }}" class="d-block w-100" style="height: 500px; object-fit: cover;" alt="Tecnologia">
                 <div class="container">
-                    <div class="carousel-caption text-end">
-                        <h1>ITCV</h1>
-                        <p>Estudio Ingeniería en Sistemas Computacionales en el Tec Victoria.</p>
+                    <div class="carousel-caption ">
+                        <h1>Tecnologia</h1>
+                        <p>Aqui encontraras las noticias mas recientes acerca de la tecnologia</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="carousel-item">
+                <img src="{{ asset('img/logo.png') }}" class="d-block w-100" style="height: 500px; object-fit: cover;" alt="INternacionales">
+                <div class="container">
+                    <div class="carousel-caption ">
+                        <h1>Noticias internacionales</h1>
+                        <p>Las noticias mas importantes del mundo</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="carousel-item">
+                <img src="{{ asset('img/logo.png') }}" class="d-block w-100" style="height: 500px; object-fit: cover;" alt="CLima">
+                <div class="container">
+                    <div class="carousel-caption ">
+                        <h1>Clima</h1>
+                        <p>Noticias mas recientes acerca del clima</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="carousel-item">
+                <img src="{{ asset('img/logo.png') }}" class="d-block w-100" style="height: 500px; object-fit: cover;" alt="Locales">
+                <div class="container">
+                    <div class="carousel-caption ">
+                        <h1>Locales</h1>
+                        <p>Las noticias mas recientes cerca de ti./p>
                     </div>
                 </div>
             </div>
