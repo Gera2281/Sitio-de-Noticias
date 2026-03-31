@@ -5,11 +5,11 @@
 @section('contenido')
     <h2 class="text-center mb-4">Nueva noticia</h2>
     <div class="container mt-4">
-        <form action="{{ route('clima.agg') }}" method="POST">
+        <form action="{{ route('clima.agg') }}" method="POST" enctype="multipart/form-data">
             @csrf
             <div class="mb-3">
                 <label for="imagen" class="form-label">Imagen</label>
-                <input type="text" class="form-control" id="imagen" name="imagen">
+                <input type="file" class="form-control" id="imagen" name="imagen" accept="image/*">
             </div>
             <div class="mb-3">
                 <label for="titulo" class="form-label">Titulo</label>

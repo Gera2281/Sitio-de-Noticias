@@ -8,7 +8,7 @@
 
 <body>
 
-<div class="container" style="margin-top:100px;">
+<div class="container" style="margin-top:70px;">
     @include('layouts.partials.menu')
         @yield('contenido')
 

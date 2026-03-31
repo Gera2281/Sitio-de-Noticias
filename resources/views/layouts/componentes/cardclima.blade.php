@@ -1,7 +1,7 @@
 <div class="card h-100 border-0 shadow-sm">
     <div class="d-flex align-items-center justify-content-center p-3" style="height: 200px;">
 
-        <img src="{{ $image }}" 
+        <img src="{{ asset('storage/' . $image) }}" 
              class="img-fluid" 
              alt="{{ $title }}" 
              style="max-height: 100%; object-fit: contain;">

@@ -32,7 +32,10 @@ class TareaController
     public function agregarDeporte(Request $request)
     {
         $deporte = new Deporte();
-        $deporte->imagen = $request->imagen;
+        if ($request->hasFile('imagen')) {
+            $path = $request->file('imagen')->store('images', 'public');
+            $deporte->imagen = $path;
+        }
         $deporte->titulo = $request->titulo;
         $deporte->descripcion = $request->descripcion;
         $deporte->save();
@@ -54,7 +57,10 @@ class TareaController
     public function agregarTecnologia(Request $request)
     {
         $tecnologia = new Tecnologia();
-        $tecnologia->imagen = $request->imagen;
+        if ($request->hasFile('imagen')) {
+            $path = $request->file('imagen')->store('images', 'public');
+            $tecnologia->imagen = $path;
+        }
         $tecnologia->titulo = $request->titulo;
         $tecnologia->descripcion = $request->descripcion;
         $tecnologia->save();
@@ -76,7 +82,10 @@ class TareaController
     public function agregarInternacional(Request $request)
     {
         $internacional = new Internacional();
-        $internacional->imagen = $request->imagen;
+        if ($request->hasFile('imagen')) {
+            $path = $request->file('imagen')->store('images', 'public');
+            $internacional->imagen = $path;
+        }
         $internacional->titulo = $request->titulo;
         $internacional->descripcion = $request->descripcion;
         $internacional->save();
@@ -98,7 +107,10 @@ class TareaController
     public function agregarClima(Request $request)
     {
         $clima = new Clima();
-        $clima->imagen = $request->imagen;
+        if ($request->hasFile('imagen')) {
+            $path = $request->file('imagen')->store('images', 'public');
+            $clima->imagen = $path;
+        }
         $clima->titulo = $request->titulo;
         $clima->descripcion = $request->descripcion;
         $clima->save();
@@ -120,7 +132,10 @@ class TareaController
     public function agregarLocal(Request $request)
     {
         $local = new Local();
-        $local->imagen = $request->imagen;
+        if ($request->hasFile('imagen')) {
+            $path = $request->file('imagen')->store('images', 'public');
+            $local->imagen = $path;
+        }
         $local->titulo = $request->titulo;
         $local->descripcion = $request->descripcion;
         $local->save();
