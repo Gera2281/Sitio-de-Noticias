@@ -15,6 +15,7 @@
             @slot('image', $deporte->imagen)
             @slot('title', $deporte->titulo)
             @slot('content', $deporte->descripcion)
+            @slot('link', route('deportes.show', $deporte))
             @endcomponent
             @if(auth()->check() && auth()->user()->role === 'revisor')
                 <form action="{{ route('deportes.aprobar', $deporte) }}" method="POST" class="d-inline">

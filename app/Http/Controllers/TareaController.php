@@ -49,11 +49,21 @@ class TareaController
         }
         $deporte->titulo = $request->titulo;
         $deporte->descripcion = $request->descripcion;
+        $deporte->contenido = $request->contenido;
         $deporte->user_id = auth()->id();
         $deporte->status = 'pending';
         $deporte->save();
 
         return redirect()->route('deportes.index');
+    }
+
+    public function showDeporte(Deporte $deporte)
+    {
+        // Solo mostrar si está aprobado o si el usuario es editor/revisor
+        if ($deporte->status !== 'approved' && (!auth()->check() || (auth()->user()->role !== 'editor' && auth()->user()->role !== 'revisor'))) {
+            abort(404);
+        }
+        return view('deportes.show', compact('deporte'));
     }
 
     public function tecnologia()

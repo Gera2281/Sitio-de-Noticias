@@ -15,6 +15,7 @@ use App\Http\Controllers\TareaController;
 
 Route::get('/', [TareaController::class, 'inicio'])->name('inicio');
 Route::get('/deportes', [TareaController::class, 'deportes'])->name('deportes.index');
+Route::get('/deportes/{deporte}', [TareaController::class, 'showDeporte'])->name('deportes.show');
 Route::get('/tecnologia', [TareaController::class, 'tecnologia'])->name('tecnologia.index');
 Route::get('/internacionales', [TareaController::class, 'internacionales'])->name('internacionales.index');
 Route::get('/clima', [TareaController::class, 'clima'])->name('clima.index');

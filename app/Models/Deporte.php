@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class Deporte extends Model
 {
     protected $table = 'deportes';
-    protected $fillable = ['imagen', 'titulo', 'descripcion', 'user_id', 'status'];
+    protected $fillable = ['imagen', 'titulo', 'descripcion', 'contenido', 'user_id', 'status'];
 
     public function user()
     {
