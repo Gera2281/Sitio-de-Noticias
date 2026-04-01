@@ -14,8 +14,13 @@ return new class extends Migration
         Schema::dropIfExists('tareas');
         Schema::dropIfExists('autors');
 
-        Schema::rename('tareas2', 'tareas');
-        Schema::rename('autor2s', 'autors');
+        if (Schema::hasTable('tareas2')) {
+            Schema::rename('tareas2', 'tareas');
+        }
+
+        if (Schema::hasTable('autor2s')) {
+            Schema::rename('autor2s', 'autors');
+        }
     }
 
     /**
