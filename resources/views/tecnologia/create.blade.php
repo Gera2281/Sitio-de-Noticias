@@ -19,6 +19,10 @@
                 <label for="descripcion" class="form-label">Descripcion</label>
                 <input type="text" class="form-control" id="descripcion" name="descripcion">
             </div>
+            <div class="mb-3">
+                <label for="contenido" class="form-label">Contenido</label>
+                <textarea class="form-control" id="contenido" name="contenido" rows="5"></textarea>
+            </div>
             <button type="submit" class="btn btn-primary">Crear</button>
         </form>
     </div>

@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class Local extends Model
 {
     protected $table = 'locales';
-    protected $fillable = ['imagen', 'titulo', 'descripcion', 'user_id', 'status'];
+    protected $fillable = ['imagen', 'titulo', 'descripcion', 'contenido', 'user_id', 'status'];
 
     public function user()
     {

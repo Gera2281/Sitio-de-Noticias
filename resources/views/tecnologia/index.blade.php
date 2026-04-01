@@ -15,6 +15,7 @@
             @slot('image', $tecnologica->imagen)
             @slot('title', $tecnologica->titulo)
             @slot('content', $tecnologica->descripcion)
+            @slot('link', route('tecnologia.show', $tecnologica))
             @endcomponent
             @if(auth()->check() && auth()->user()->role === 'revisor')
                 <form action="{{ route('tecnologia.aprobar', $tecnologica) }}" method="POST" class="d-inline">

@@ -15,6 +15,7 @@
             @slot('image', $internacional->imagen)
             @slot('title', $internacional->titulo)
             @slot('content', $internacional->descripcion)
+            @slot('link', route('internacionales.show', $internacional))
             @endcomponent
             @if(auth()->check() && auth()->user()->role === 'revisor')
                 <form action="{{ route('internacionales.aprobar', $internacional) }}" method="POST" class="d-inline">

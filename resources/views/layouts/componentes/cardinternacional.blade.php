@@ -1,3 +1,6 @@
+@props(['image', 'title', 'content', 'link' => '#'])
+
+<a href="{{ $link }}" class="text-decoration-none">
 <div class="card h-100 border-0 shadow-sm">
     <div class="d-flex align-items-center justify-content-center p-3" style="height: 200px;">
 
@@ -18,3 +21,4 @@
         
     </div>
 </div>
+</a>

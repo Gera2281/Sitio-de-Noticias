@@ -97,11 +97,20 @@ class TareaController
         }
         $tecnologia->titulo = $request->titulo;
         $tecnologia->descripcion = $request->descripcion;
+        $tecnologia->contenido = $request->contenido;
         $tecnologia->user_id = auth()->id();
         $tecnologia->status = 'pending';
         $tecnologia->save();
 
         return redirect()->route('tecnologia.index');
+    }
+
+    public function showTecnologia(Tecnologia $tecnologia)
+    {
+        if ($tecnologia->status !== 'approved' && (!auth()->check() || (auth()->user()->role !== 'editor' && auth()->user()->role !== 'revisor'))) {
+            abort(404);
+        }
+        return view('tecnologia.show', compact('tecnologia'));
     }
 
     public function internacionales()
@@ -135,11 +144,20 @@ class TareaController
         }
         $internacional->titulo = $request->titulo;
         $internacional->descripcion = $request->descripcion;
+        $internacional->contenido = $request->contenido;
         $internacional->user_id = auth()->id();
         $internacional->status = 'pending';
         $internacional->save();
 
         return redirect()->route('internacionales.index');
+    }
+
+    public function showInternacional(Internacional $internacional)
+    {
+        if ($internacional->status !== 'approved' && (!auth()->check() || (auth()->user()->role !== 'editor' && auth()->user()->role !== 'revisor'))) {
+            abort(404);
+        }
+        return view('internacionales.show', compact('internacional'));
     }
 
     public function clima()
@@ -173,11 +191,20 @@ class TareaController
         }
         $clima->titulo = $request->titulo;
         $clima->descripcion = $request->descripcion;
+        $clima->contenido = $request->contenido;
         $clima->user_id = auth()->id();
         $clima->status = 'pending';
         $clima->save();
 
         return redirect()->route('clima.index');
+    }
+
+    public function showClima(Clima $clima)
+    {
+        if ($clima->status !== 'approved' && (!auth()->check() || (auth()->user()->role !== 'editor' && auth()->user()->role !== 'revisor'))) {
+            abort(404);
+        }
+        return view('clima.show', compact('clima'));
     }
 
     public function locales()   
@@ -211,11 +238,20 @@ class TareaController
         }
         $local->titulo = $request->titulo;
         $local->descripcion = $request->descripcion;
+        $local->contenido = $request->contenido;
         $local->user_id = auth()->id();
         $local->status = 'pending';
         $local->save();
 
         return redirect()->route('locales.index');
+    }
+
+    public function showLocal(Local $local)
+    {
+        if ($local->status !== 'approved' && (!auth()->check() || (auth()->user()->role !== 'editor' && auth()->user()->role !== 'revisor'))) {
+            abort(404);
+        }
+        return view('locales.show', compact('local'));
     }
 
     // Revisor actions
