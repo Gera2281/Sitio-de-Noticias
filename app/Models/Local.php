@@ -7,7 +7,10 @@ use Illuminate\Database\Eloquent\Model;
 class Local extends Model
 {
     protected $table = 'locales';
-    protected $fillable = ['imagen', 'titulo', 'descripcion'];
+    protected $fillable = ['imagen', 'titulo', 'descripcion', 'user_id', 'status'];
 
-    
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
 }

@@ -20,7 +20,18 @@ class TareaController
 
     public function deportes()
     {
-        $deportes = Deporte::all();
+        if (auth()->check()) {
+            $role = auth()->user()->role;
+            if ($role == 'revisor') {
+                $deportes = Deporte::where('status', 'pending')->get();
+            } elseif ($role == 'editor') {
+                $deportes = Deporte::where('user_id', auth()->id())->orWhere('status', 'approved')->get();
+            } else {
+                $deportes = Deporte::where('status', 'approved')->get();
+            }
+        } else {
+            $deportes = Deporte::where('status', 'approved')->get();
+        }
         return view('deportes.index', compact('deportes'));
     }
 
@@ -38,6 +49,8 @@ class TareaController
         }
         $deporte->titulo = $request->titulo;
         $deporte->descripcion = $request->descripcion;
+        $deporte->user_id = auth()->id();
+        $deporte->status = 'pending';
         $deporte->save();
 
         return redirect()->route('deportes.index');
@@ -45,7 +58,18 @@ class TareaController
 
     public function tecnologia()
     {
-        $tecnologia = Tecnologia::all();
+        if (auth()->check()) {
+            $role = auth()->user()->role;
+            if ($role == 'revisor') {
+                $tecnologia = Tecnologia::where('status', 'pending')->get();
+            } elseif ($role == 'editor') {
+                $tecnologia = Tecnologia::where('user_id', auth()->id())->orWhere('status', 'approved')->get();
+            } else {
+                $tecnologia = Tecnologia::where('status', 'approved')->get();
+            }
+        } else {
+            $tecnologia = Tecnologia::where('status', 'approved')->get();
+        }
         return view('tecnologia.index', compact('tecnologia'));
     }
 
@@ -63,6 +87,8 @@ class TareaController
         }
         $tecnologia->titulo = $request->titulo;
         $tecnologia->descripcion = $request->descripcion;
+        $tecnologia->user_id = auth()->id();
+        $tecnologia->status = 'pending';
         $tecnologia->save();
 
         return redirect()->route('tecnologia.index');
@@ -70,7 +96,18 @@ class TareaController
 
     public function internacionales()
     {
-        $internacionales = Internacional::all();
+        if (auth()->check()) {
+            $role = auth()->user()->role;
+            if ($role == 'revisor') {
+                $internacionales = Internacional::where('status', 'pending')->get();
+            } elseif ($role == 'editor') {
+                $internacionales = Internacional::where('user_id', auth()->id())->orWhere('status', 'approved')->get();
+            } else {
+                $internacionales = Internacional::where('status', 'approved')->get();
+            }
+        } else {
+            $internacionales = Internacional::where('status', 'approved')->get();
+        }
         return view('internacionales.index', compact('internacionales'));
     }
 
@@ -88,6 +125,8 @@ class TareaController
         }
         $internacional->titulo = $request->titulo;
         $internacional->descripcion = $request->descripcion;
+        $internacional->user_id = auth()->id();
+        $internacional->status = 'pending';
         $internacional->save();
 
         return redirect()->route('internacionales.index');
@@ -95,7 +134,18 @@ class TareaController
 
     public function clima()
     {
-        $clima = Clima::all();
+        if (auth()->check()) {
+            $role = auth()->user()->role;
+            if ($role == 'revisor') {
+                $clima = Clima::where('status', 'pending')->get();
+            } elseif ($role == 'editor') {
+                $clima = Clima::where('user_id', auth()->id())->orWhere('status', 'approved')->get();
+            } else {
+                $clima = Clima::where('status', 'approved')->get();
+            }
+        } else {
+            $clima = Clima::where('status', 'approved')->get();
+        }
         return view('clima.index', compact('clima'));
     }
 
@@ -113,6 +163,8 @@ class TareaController
         }
         $clima->titulo = $request->titulo;
         $clima->descripcion = $request->descripcion;
+        $clima->user_id = auth()->id();
+        $clima->status = 'pending';
         $clima->save();
 
         return redirect()->route('clima.index');
@@ -120,7 +172,18 @@ class TareaController
 
     public function locales()   
     {
-        $locales = Local::all();
+        if (auth()->check()) {
+            $role = auth()->user()->role;
+            if ($role == 'revisor') {
+                $locales = Local::where('status', 'pending')->get();
+            } elseif ($role == 'editor') {
+                $locales = Local::where('user_id', auth()->id())->orWhere('status', 'approved')->get();
+            } else {
+                $locales = Local::where('status', 'approved')->get();
+            }
+        } else {
+            $locales = Local::where('status', 'approved')->get();
+        }
         return view('locales.index', compact('locales'));
     }
 
@@ -138,9 +201,92 @@ class TareaController
         }
         $local->titulo = $request->titulo;
         $local->descripcion = $request->descripcion;
+        $local->user_id = auth()->id();
+        $local->status = 'pending';
         $local->save();
 
         return redirect()->route('locales.index');
+    }
+
+    // Revisor actions
+    public function aprobarDeporte(Deporte $deporte)
+    {
+        $deporte->status = 'approved';
+        $deporte->save();
+
+        return back();
+    }
+
+    public function rechazarDeporte(Deporte $deporte)
+    {
+        $deporte->status = 'rejected';
+        $deporte->save();
+
+        return back();
+    }
+
+    public function aprobarTecnologia(Tecnologia $tecnologia)
+    {
+        $tecnologia->status = 'approved';
+        $tecnologia->save();
+
+        return back();
+    }
+
+    public function rechazarTecnologia(Tecnologia $tecnologia)
+    {
+        $tecnologia->status = 'rejected';
+        $tecnologia->save();
+
+        return back();
+    }
+
+    public function aprobarInternacional(Internacional $internacional)
+    {
+        $internacional->status = 'approved';
+        $internacional->save();
+
+        return back();
+    }
+
+    public function rechazarInternacional(Internacional $internacional)
+    {
+        $internacional->status = 'rejected';
+        $internacional->save();
+
+        return back();
+    }
+
+    public function aprobarClima(Clima $clima)
+    {
+        $clima->status = 'approved';
+        $clima->save();
+
+        return back();
+    }
+
+    public function rechazarClima(Clima $clima)
+    {
+        $clima->status = 'rejected';
+        $clima->save();
+
+        return back();
+    }
+
+    public function aprobarLocal(Local $local)
+    {
+        $local->status = 'approved';
+        $local->save();
+
+        return back();
+    }
+
+    public function rechazarLocal(Local $local)
+    {
+        $local->status = 'rejected';
+        $local->save();
+
+        return back();
     }
 
     public function productos()

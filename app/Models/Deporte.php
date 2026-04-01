@@ -7,7 +7,10 @@ use Illuminate\Database\Eloquent\Model;
 class Deporte extends Model
 {
     protected $table = 'deportes';
-    protected $fillable = ['imagen', 'titulo', 'descripcion'];
+    protected $fillable = ['imagen', 'titulo', 'descripcion', 'user_id', 'status'];
 
-    
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
 }

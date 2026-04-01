@@ -12,5 +12,12 @@ class Tecnologia extends Model
         'imagen',
         'titulo',
         'descripcion',
+        'user_id',
+        'status',
     ];
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
 }

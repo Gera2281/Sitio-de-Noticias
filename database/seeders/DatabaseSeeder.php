@@ -15,16 +15,6 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        $username = env('DB_USERNAME', 'root');
-        $password = env('DB_PASSWORD', '');
-
-        User::updateOrCreate(
-            ['email' => $username . '@bdatos.com'],
-            [
-                'name'     => $username,
-                'email'    => $username . '@bdatos.com',
-                'password' => \Illuminate\Support\Facades\Hash::make($password),
-            ]
-        );
+        $this->call(UserSeeder::class);
     }
 }
