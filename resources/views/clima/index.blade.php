@@ -15,6 +15,7 @@
             @slot('image', $item->imagen)
             @slot('title', $item->titulo)
             @slot('content', $item->descripcion)
+            @slot('link', route('clima.show', $item))
             @endcomponent
             @if(auth()->check() && auth()->user()->role === 'revisor')
                 <form action="{{ route('clima.aprobar', $item) }}" method="POST" class="d-inline">

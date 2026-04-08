@@ -12,6 +12,7 @@ class Tecnologia extends Model
         'imagen',
         'titulo',
         'descripcion',
+        'contenido',
         'user_id',
         'status',
     ];

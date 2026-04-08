@@ -17,9 +17,13 @@ Route::get('/', [TareaController::class, 'inicio'])->name('inicio');
 Route::get('/deportes', [TareaController::class, 'deportes'])->name('deportes.index');
 Route::get('/deportes/{deporte}', [TareaController::class, 'showDeporte'])->name('deportes.show');
 Route::get('/tecnologia', [TareaController::class, 'tecnologia'])->name('tecnologia.index');
+Route::get('/tecnologia/{tecnologia}', [TareaController::class, 'showTecnologia'])->name('tecnologia.show');
 Route::get('/internacionales', [TareaController::class, 'internacionales'])->name('internacionales.index');
+Route::get('/internacionales/{internacional}', [TareaController::class, 'showInternacional'])->name('internacionales.show');
 Route::get('/clima', [TareaController::class, 'clima'])->name('clima.index');
+Route::get('/clima/{clima}', [TareaController::class, 'showClima'])->name('clima.show');
 Route::get('/locales', [TareaController::class, 'locales'])->name('locales.index');
+Route::get('/locales/{local}', [TareaController::class, 'showLocal'])->name('locales.show');
 
 Route::middleware(['auth', 'role:editor'])->group(function () {
     Route::get('/createDeporte', [TareaController::class, 'createDeporte'])->name('deportes.create');

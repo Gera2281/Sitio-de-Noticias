@@ -15,6 +15,7 @@
             @slot('image', $local->imagen)
             @slot('title', $local->titulo)
             @slot('content', $local->descripcion)
+            @slot('link', route('locales.show', $local))
             @endcomponent
             @if(auth()->check() && auth()->user()->role === 'revisor')
                 <form action="{{ route('locales.aprobar', $local) }}" method="POST" class="d-inline">
