@@ -1,24 +1,14 @@
 @props(['image', 'title', 'content', 'link' => '#'])
 
-<a href="{{ $link }}" class="text-decoration-none">
-<div class="card h-100 border-0 shadow-sm">
-    <div class="d-flex align-items-center justify-content-center p-3" style="height: 200px;">
-
-        <img src="{{ asset('storage/' . $image) }}" 
-             class="img-fluid" 
-             alt="{{ $title }}" 
-             style="max-height: 100%; object-fit: contain;">
+<a href="{{ $link }}" class="text-decoration-none news-card-link">
+    <div class="news-card">
+        <div class="news-card-img" style="--card-bg: url('{{ asset('storage/' . $image) }}');">
+            <div class="news-card-overlay"></div>
+            <div class="news-card-body">
+                <span class="news-card-category news-cat-local">Local</span>
+                <h5 class="news-card-title">{{ $title }}</h5>
+                <p class="news-card-text">{{ Str::limit($content, 80) }}</p>
+            </div>
+        </div>
     </div>
-    
-    <div class="card-body d-flex flex-column pt-0">
-        <h5 class="card-title text-primary mb-1" style="font-size: 0.9rem; line-height: 1.2; height: 2.4em; overflow: hidden;">
-            {{ $title }}
-        </h5>
-        
-        <p class="card-text text-muted small mb-2" style="height: 3em; overflow: hidden;">
-            {{ $content }}
-        </p>
-        
-    </div>
-</div>
 </a>
