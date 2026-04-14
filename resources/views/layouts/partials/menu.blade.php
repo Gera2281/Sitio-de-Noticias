@@ -1,7 +1,9 @@
 <nav class="navbar navbar-dark bg-dark fixed-top">
     <div class="container-fluid justify-content-start">
-        <a class="navbar-brand" href="{{ url('/') }}">Noticias en llamas</a>
-        <img src="{{ asset('img/Noti.png') }}" alt="Logo" width="35" height="35">
+        <a class="navbar-brand d-flex align-items-center" href="{{ url('/') }}">
+            <img src="{{ asset('img/Noti.png') }}" alt="Noticias en llamas" width="35" height="35" class="me-2">
+            <span>Noticias en llamas</span>
+        </a>
         <div class="ms-4">
             <a class="text-white me-3" href="{{ url('/') }}">Inicio</a>
             <a class="text-white me-3" href="{{ url('/deportes') }}">Deportes</a>

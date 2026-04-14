@@ -33,4 +33,5 @@
         @endforeach
     </div>
 </div>
+<!-- Paginación -->
 @endsection
