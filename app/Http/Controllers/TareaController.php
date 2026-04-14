@@ -15,7 +15,13 @@ class TareaController
 {
     public function inicio()
     {
-        return view('Inicio');
+        $deportes = Deporte::where('status', 'approved')->latest()->take(3)->get();
+        $tecnologia = Tecnologia::where('status', 'approved')->latest()->take(3)->get();
+        $locales = Local::where('status', 'approved')->latest()->take(3)->get();
+        $internacionales = Internacional::where('status', 'approved')->latest()->take(3)->get();
+        $clima = Clima::where('status', 'approved')->latest()->take(3)->get();
+
+        return view('Inicio', compact('deportes', 'tecnologia', 'locales', 'internacionales', 'clima'));
     }
 
     public function deportes()
@@ -35,7 +41,7 @@ class TareaController
         return view('deportes.index', compact('deportes'));
     }
 
-    public function createDeporte()   
+    public function createDeporte()
     {
         return view('deportes.create');
     }
@@ -83,7 +89,7 @@ class TareaController
         return view('tecnologia.index', compact('tecnologia'));
     }
 
-    public function createTecnologia()   
+    public function createTecnologia()
     {
         return view('tecnologia.create');
     }
@@ -130,7 +136,7 @@ class TareaController
         return view('internacionales.index', compact('internacionales'));
     }
 
-    public function createInternacional()   
+    public function createInternacional()
     {
         return view('internacionales.create');
     }
@@ -177,7 +183,7 @@ class TareaController
         return view('clima.index', compact('clima'));
     }
 
-    public function createClima()   
+    public function createClima()
     {
         return view('clima.create');
     }
@@ -207,7 +213,7 @@ class TareaController
         return view('clima.show', compact('clima'));
     }
 
-    public function locales()   
+    public function locales()
     {
         if (auth()->check()) {
             $role = auth()->user()->role;
@@ -224,7 +230,7 @@ class TareaController
         return view('locales.index', compact('locales'));
     }
 
-    public function createLocal()   
+    public function createLocal()
     {
         return view('locales.create');
     }
@@ -341,7 +347,7 @@ class TareaController
         return view('layouts.partials.productos', compact('productos'));
     }
 
-    public function createP()   
+    public function createP()
     {
         return view('productos.create');
     }
