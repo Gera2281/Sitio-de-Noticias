@@ -48,6 +48,13 @@ class TareaController
 
     public function agregarDeporte(Request $request)
     {
+        $request->validate([
+            'titulo' => 'required|string|max:150',
+            'descripcion' => 'required|string|max:255',
+            'contenido' => 'required|string',
+            'imagen' => 'nullable|image|mimes:jpeg,png,webp,jpg|max:2048',
+        ]);
+
         $deporte = new Deporte();
         if ($request->hasFile('imagen')) {
             $path = $request->file('imagen')->store('images', 'public');
@@ -96,6 +103,13 @@ class TareaController
 
     public function agregarTecnologia(Request $request)
     {
+        $request->validate([
+            'titulo' => 'required|string|max:150',
+            'descripcion' => 'required|string|max:255',
+            'contenido' => 'required|string',
+            'imagen' => 'nullable|image|mimes:jpeg,png,webp,jpg|max:2048',
+        ]);
+
         $tecnologia = new Tecnologia();
         if ($request->hasFile('imagen')) {
             $path = $request->file('imagen')->store('images', 'public');
@@ -143,6 +157,13 @@ class TareaController
 
     public function agregarInternacional(Request $request)
     {
+        $request->validate([
+            'titulo' => 'required|string|max:150',
+            'descripcion' => 'required|string|max:255',
+            'contenido' => 'required|string',
+            'imagen' => 'nullable|image|mimes:jpeg,png,webp,jpg|max:2048',
+        ]);
+
         $internacional = new Internacional();
         if ($request->hasFile('imagen')) {
             $path = $request->file('imagen')->store('images', 'public');
@@ -190,6 +211,13 @@ class TareaController
 
     public function agregarClima(Request $request)
     {
+        $request->validate([
+            'titulo' => 'required|string|max:150',
+            'descripcion' => 'required|string|max:255',
+            'contenido' => 'required|string',
+            'imagen' => 'nullable|image|mimes:jpeg,png,webp,jpg|max:2048',
+        ]);
+
         $clima = new Clima();
         if ($request->hasFile('imagen')) {
             $path = $request->file('imagen')->store('images', 'public');
@@ -237,6 +265,13 @@ class TareaController
 
     public function agregarLocal(Request $request)
     {
+        $request->validate([
+            'titulo' => 'required|string|max:150',
+            'descripcion' => 'required|string|max:255',
+            'contenido' => 'required|string',
+            'imagen' => 'nullable|image|mimes:jpeg,png,webp,jpg|max:2048',
+        ]);
+
         $local = new Local();
         if ($request->hasFile('imagen')) {
             $path = $request->file('imagen')->store('images', 'public');
@@ -354,6 +389,13 @@ class TareaController
 
     public function storeP(Request $request)
     {
+        $request->validate([
+            'imagen' => 'nullable|string|max:255',
+            'titulo' => 'required|string|max:150',
+            'descripcion' => 'required|string|max:255',
+            'precio' => 'required|numeric|min:0',
+        ]);
+
         $producto = new Producto();
         $producto->imagen = $request->imagen;
         $producto->titulo = $request->titulo;
@@ -377,6 +419,12 @@ class TareaController
 
     public function store(Request $request)
     {
+        $request->validate([
+            'nombre' => 'required|string|max:150',
+            'descripcion' => 'required|string|max:255',
+            'entrega' => 'required|date',
+        ]);
+
         $tarea = new Tarea();
         $tarea->nombre = $request->nombre;
         $tarea->descripcion = $request->descripcion;

@@ -3,7 +3,7 @@
 @section('titulo', 'Inicio')
 
 @section('contenido')
-<div id="myCarousel" class="carousel slide carousel-fade mb-5" data-bs-ride="carousel" data-bs-interval="4000">
+<div id="myCarousel" class="carousel slide carousel-fade mb-12" data-bs-ride="carousel" data-bs-interval="4000">
     <div class="carousel-indicators">
         <button type="button" data-bs-target="#myCarousel" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
         <button type="button" data-bs-target="#myCarousel" data-bs-slide-to="1" aria-label="Slide 2"></button>
