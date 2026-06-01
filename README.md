@@ -33,7 +33,10 @@ Sitio de Noticias es una aplicación web que permite la publicación de contenid
 El contenido pasa por un flujo de aprobación antes de ser visible al público:
 
 ```
-El editor crea noticia → Estado: "Pendiente" → El revisor aprueba/rechaza → Estado: "Aprobada" / "Rechazada"
+1. El editor crea noticia → Estado: "Pendiente"
+2. El revisor revisa:
+   - Si aprueba → Estado: "Aprobada" (Visible al público). El revisor puede eliminarla después.
+   - Si rechaza → Estado: "Rechazada". El editor puede eliminarla o editarla para volver a enviarla (vuelve a "Pendiente").
 ```
 
 Solo las noticias en estado **Aprobada** son visibles para el público general.
@@ -43,9 +46,9 @@ Solo las noticias en estado **Aprobada** son visibles para el público general.
 ## 👥 Roles del Sistema
 
 | Rol           |        Permisos
-
-| **Editor**    | Crear y publicar noticias con título, descripción, contenido e imagen
-| **Revisor**   | Ver noticias pendientes, aprobarlas o rechazarlas
+|---------------|----------------
+| **Editor**    | Crear noticias. Editar y eliminar únicamente sus propias noticias que hayan sido rechazadas.
+| **Revisor**   | Aprobar/rechazar noticias pendientes. Eliminar noticias que ya están aprobadas.
 | **Espectador** | Leer noticias aprobadas (rol por defecto al registrarse)
 | **Invitado**  | Leer noticias aprobadas sin necesidad de registrarse
 
