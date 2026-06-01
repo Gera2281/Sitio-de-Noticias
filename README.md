@@ -413,16 +413,16 @@ composer update
 
 ## 🛠️ Tecnologías Utilizadas
 
-| Tecnología | Versión | Uso |
-|------------|---------|-----|
-| **PHP** | ^8.2 | Lenguaje backend |
-| **Laravel** | ^12.0 | Framework principal |
-| **MySQL** | 5.7+ | Base de datos relacional |
-| **Vite** | ^7.0 | Compilación de assets |
-| **TailwindCSS** | ^4.0 | Framework de estilos CSS |
-| **Alpine.js** | ^3.4 | Interactividad del frontend |
-| **Bootstrap** | 5 (CDN) | Componentes de UI adicionales |
-| **Laravel Breeze** | ^2.4 | Autenticación y gestión de usuarios |
+| Tecnología        | Versión | Uso                     |
+|-------------------|---------|-------------------------|
+| **PHP**           | ^8.2    | Lenguaje backend        |
+| **Laravel**       | ^12.0   | Framework principal     |
+| **MySQL**         | 5.7+    | Base de datos relacional |
+| **Vite**          | ^7.0    | Compilación de assets   |
+| **TailwindCSS**   | ^4.0    | Framework de estilos CSS |
+| **Alpine.js**     | ^3.4    | Interactividad del frontend |
+| **Bootstrap**     | 5 (CDN) | Componentes de UI adicionales |
+| **Laravel Breeze**| ^2.4    | Autenticación y gestión de usuarios |
 
 ---
 
