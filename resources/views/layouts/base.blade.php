@@ -118,7 +118,7 @@
         }
 
         #myCarousel .carousel-item img {
-            height: 580px;
+            height: 680px;
             object-fit: cover;
             filter: brightness(0.75);
             transition: transform 4s ease;
