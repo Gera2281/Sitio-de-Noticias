@@ -17,21 +17,45 @@
             @slot('content', $deporte->descripcion)
             @slot('link', route('deportes.show', $deporte))
             @endcomponent
-            @if(auth()->check() && auth()->user()->role === 'revisor')
-                <form action="{{ route('deportes.aprobar', $deporte) }}" method="POST" class="d-inline">
-                    @csrf
-                    @method('PATCH')
-                    <button type="submit" class="btn btn-success btn-sm mt-2">Aprobar</button>
-                </form>
-                <form action="{{ route('deportes.rechazar', $deporte) }}" method="POST" class="d-inline">
-                    @csrf
-                    @method('PATCH')
-                    <button type="submit" class="btn btn-danger btn-sm mt-2">Rechazar</button>
-                </form>
+                        @if(auth()->check() && auth()->user()->role === 'revisor')
+                @if($deporte->status === 'pending')
+                    <form action="{{ route('deportes.aprobar', $deporte) }}" method="POST" class="d-inline">
+                        @csrf
+                        @method('PATCH')
+                        <button type="submit" class="btn btn-success btn-sm mt-2">Aprobar</button>
+                    </form>
+                    <form action="{{ route('deportes.rechazar', $deporte) }}" method="POST" class="d-inline">
+                        @csrf
+                        @method('PATCH')
+                        <button type="submit" class="btn btn-danger btn-sm mt-2">Rechazar</button>
+                    </form>
+                @elseif($deporte->status === 'approved')
+                    <form action="{{ route('deportes.destroy', $deporte) }}" method="POST" class="d-inline mt-2" onsubmit="return confirm('¿Eliminar esta noticia aprobada permanentemente?')">
+                        @csrf
+                        @method('DELETE')
+                        <button type="submit" class="btn btn-danger btn-sm mt-2">Eliminar</button>
+                    </form>
+                @endif
+            @endif
+            @if(auth()->check() && auth()->user()->role === 'editor' && $deporte->user_id === auth()->id())
+                @if($deporte->status === 'rejected')
+                <div class="mt-2 p-2 border border-danger rounded bg-danger bg-opacity-10">
+                    <span class="badge bg-danger mb-2">Rechazada</span>
+                    <div class="d-flex gap-1">
+                        <a href="{{ route('deportes.edit', $deporte) }}" class="btn btn-warning btn-sm">Editar</a>
+                        <form action="{{ route('deportes.destroy', $deporte) }}" method="POST"
+                              onsubmit="return confirm('¿Eliminar esta noticia permanentemente?')">
+                            @csrf
+                            @method('DELETE')
+                            <button type="submit" class="btn btn-danger btn-sm">Eliminar</button>
+                        </form>
+                    </div>
+                </div>
+                @endif
             @endif
         </div>
         @endforeach
     </div>
 </div>
-<!-- Paginación -->
+<!-- PaginaciÃ³n -->
 @endsection

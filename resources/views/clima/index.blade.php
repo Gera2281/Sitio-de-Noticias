@@ -17,17 +17,41 @@
             @slot('content', $item->descripcion)
             @slot('link', route('clima.show', $item))
             @endcomponent
-            @if(auth()->check() && auth()->user()->role === 'revisor')
-                <form action="{{ route('clima.aprobar', $item) }}" method="POST" class="d-inline">
-                    @csrf
-                    @method('PATCH')
-                    <button class="btn btn-success btn-sm mt-2">Aprobar</button>
-                </form>
-                <form action="{{ route('clima.rechazar', $item) }}" method="POST" class="d-inline">
-                    @csrf
-                    @method('PATCH')
-                    <button class="btn btn-danger btn-sm mt-2">Rechazar</button>
-                </form>
+                        @if(auth()->check() && auth()->user()->role === 'revisor')
+                @if($item->status === 'pending')
+                    <form action="{{ route('clima.aprobar', $item) }}" method="POST" class="d-inline">
+                        @csrf
+                        @method('PATCH')
+                        <button type="submit" class="btn btn-success btn-sm mt-2">Aprobar</button>
+                    </form>
+                    <form action="{{ route('clima.rechazar', $item) }}" method="POST" class="d-inline">
+                        @csrf
+                        @method('PATCH')
+                        <button type="submit" class="btn btn-danger btn-sm mt-2">Rechazar</button>
+                    </form>
+                @elseif($item->status === 'approved')
+                    <form action="{{ route('clima.destroy', $item) }}" method="POST" class="d-inline mt-2" onsubmit="return confirm('¿Eliminar esta noticia aprobada permanentemente?')">
+                        @csrf
+                        @method('DELETE')
+                        <button type="submit" class="btn btn-danger btn-sm mt-2">Eliminar</button>
+                    </form>
+                @endif
+            @endif
+            @if(auth()->check() && auth()->user()->role === 'editor' && $item->user_id === auth()->id())
+                @if($item->status === 'rejected')
+                <div class="mt-2 p-2 border border-danger rounded bg-danger bg-opacity-10">
+                    <span class="badge bg-danger mb-2">Rechazada</span>
+                    <div class="d-flex gap-1">
+                        <a href="{{ route('clima.edit', $item) }}" class="btn btn-warning btn-sm">Editar</a>
+                        <form action="{{ route('clima.destroy', $item) }}" method="POST"
+                              onsubmit="return confirm('¿Eliminar esta noticia permanentemente?')">
+                            @csrf
+                            @method('DELETE')
+                            <button type="submit" class="btn btn-danger btn-sm">Eliminar</button>
+                        </form>
+                    </div>
+                </div>
+                @endif
             @endif
         </div>
         @endforeach

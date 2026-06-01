@@ -12,7 +12,7 @@ class LocalController extends Controller
         if (auth()->check()) {
             $role = auth()->user()->role;
             if ($role == 'revisor') {
-                $locales = Local::where('status', 'pending')->get();
+                $locales = Local::whereIn('status', ['pending', 'approved'])->get();
             } elseif ($role == 'editor') {
                 $locales = Local::where('user_id', auth()->id())->orWhere('status', 'approved')->get();
             } else {
@@ -63,6 +63,56 @@ class LocalController extends Controller
         return view('locales.show', compact('local'));
     }
 
+    public function edit(Local $local)
+    {
+        if ($local->status !== 'rejected' || $local->user_id !== auth()->id()) {
+            abort(403);
+        }
+
+        return view('locales.edit', compact('local'));
+    }
+
+    public function update(Request $request, Local $local)
+    {
+        if ($local->status !== 'rejected' || $local->user_id !== auth()->id()) {
+            abort(403);
+        }
+
+        $request->validate([
+            'titulo'      => 'required|string|max:150',
+            'descripcion' => 'required|string|max:255',
+            'contenido'   => 'required|string',
+            'imagen'      => 'nullable|image|mimes:jpeg,png,webp,jpg|max:2048',
+        ]);
+
+        if ($request->hasFile('imagen')) {
+            $path = $request->file('imagen')->store('images', 'public');
+            $local->imagen = $path;
+        }
+        $local->titulo      = $request->titulo;
+        $local->descripcion = $request->descripcion;
+        $local->contenido   = $request->contenido;
+        $local->status      = 'pending';
+        $local->save();
+
+        return redirect()->route('locales.index');
+    }
+
+    public function destroy(Local $local)
+    {
+        $user = auth()->user();
+        $isEditorOwner = $user->role === 'editor' && $local->user_id === $user->id && $local->status === 'rejected';
+        $isRevisor = $user->role === 'revisor' && $local->status === 'approved';
+
+        if (!$isEditorOwner && !$isRevisor) {
+            abort(403);
+        }
+
+        $local->delete();
+
+        return back();
+    }
+
     public function aprobar(Local $local)
     {
         $local->status = 'approved';
@@ -79,3 +129,4 @@ class LocalController extends Controller
         return back();
     }
 }
+

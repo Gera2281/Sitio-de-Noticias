@@ -17,17 +17,41 @@
             @slot('content', $tecnologica->descripcion)
             @slot('link', route('tecnologia.show', $tecnologica))
             @endcomponent
-            @if(auth()->check() && auth()->user()->role === 'revisor')
-                <form action="{{ route('tecnologia.aprobar', $tecnologica) }}" method="POST" class="d-inline">
-                    @csrf
-                    @method('PATCH')
-                    <button class="btn btn-success btn-sm mt-2">Aprobar</button>
-                </form>
-                <form action="{{ route('tecnologia.rechazar', $tecnologica) }}" method="POST" class="d-inline">
-                    @csrf
-                    @method('PATCH')
-                    <button class="btn btn-danger btn-sm mt-2">Rechazar</button>
-                </form>
+                        @if(auth()->check() && auth()->user()->role === 'revisor')
+                @if($tecnologica->status === 'pending')
+                    <form action="{{ route('tecnologia.aprobar', $tecnologica) }}" method="POST" class="d-inline">
+                        @csrf
+                        @method('PATCH')
+                        <button type="submit" class="btn btn-success btn-sm mt-2">Aprobar</button>
+                    </form>
+                    <form action="{{ route('tecnologia.rechazar', $tecnologica) }}" method="POST" class="d-inline">
+                        @csrf
+                        @method('PATCH')
+                        <button type="submit" class="btn btn-danger btn-sm mt-2">Rechazar</button>
+                    </form>
+                @elseif($tecnologica->status === 'approved')
+                    <form action="{{ route('tecnologia.destroy', $tecnologica) }}" method="POST" class="d-inline mt-2" onsubmit="return confirm('¿Eliminar esta noticia aprobada permanentemente?')">
+                        @csrf
+                        @method('DELETE')
+                        <button type="submit" class="btn btn-danger btn-sm mt-2">Eliminar</button>
+                    </form>
+                @endif
+            @endif
+            @if(auth()->check() && auth()->user()->role === 'editor' && $tecnologica->user_id === auth()->id())
+                @if($tecnologica->status === 'rejected')
+                <div class="mt-2 p-2 border border-danger rounded bg-danger bg-opacity-10">
+                    <span class="badge bg-danger mb-2">Rechazada</span>
+                    <div class="d-flex gap-1">
+                        <a href="{{ route('tecnologia.edit', $tecnologica) }}" class="btn btn-warning btn-sm">Editar</a>
+                        <form action="{{ route('tecnologia.destroy', $tecnologica) }}" method="POST"
+                              onsubmit="return confirm('¿Eliminar esta noticia permanentemente?')">
+                            @csrf
+                            @method('DELETE')
+                            <button type="submit" class="btn btn-danger btn-sm">Eliminar</button>
+                        </form>
+                    </div>
+                </div>
+                @endif
             @endif
         </div>
         @endforeach

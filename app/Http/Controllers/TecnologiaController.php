@@ -12,7 +12,7 @@ class TecnologiaController extends Controller
         if (auth()->check()) {
             $role = auth()->user()->role;
             if ($role == 'revisor') {
-                $tecnologia = Tecnologia::where('status', 'pending')->get();
+                $tecnologia = Tecnologia::whereIn('status', ['pending', 'approved'])->get();
             } elseif ($role == 'editor') {
                 $tecnologia = Tecnologia::where('user_id', auth()->id())->orWhere('status', 'approved')->get();
             } else {
@@ -63,6 +63,56 @@ class TecnologiaController extends Controller
         return view('tecnologia.show', compact('tecnologia'));
     }
 
+    public function edit(Tecnologia $tecnologia)
+    {
+        if ($tecnologia->status !== 'rejected' || $tecnologia->user_id !== auth()->id()) {
+            abort(403);
+        }
+
+        return view('tecnologia.edit', compact('tecnologia'));
+    }
+
+    public function update(Request $request, Tecnologia $tecnologia)
+    {
+        if ($tecnologia->status !== 'rejected' || $tecnologia->user_id !== auth()->id()) {
+            abort(403);
+        }
+
+        $request->validate([
+            'titulo'      => 'required|string|max:150',
+            'descripcion' => 'required|string|max:255',
+            'contenido'   => 'required|string',
+            'imagen'      => 'nullable|image|mimes:jpeg,png,webp,jpg|max:2048',
+        ]);
+
+        if ($request->hasFile('imagen')) {
+            $path = $request->file('imagen')->store('images', 'public');
+            $tecnologia->imagen = $path;
+        }
+        $tecnologia->titulo      = $request->titulo;
+        $tecnologia->descripcion = $request->descripcion;
+        $tecnologia->contenido   = $request->contenido;
+        $tecnologia->status      = 'pending';
+        $tecnologia->save();
+
+        return redirect()->route('tecnologia.index');
+    }
+
+    public function destroy(Tecnologia $tecnologia)
+    {
+        $user = auth()->user();
+        $isEditorOwner = $user->role === 'editor' && $tecnologia->user_id === $user->id && in_array($tecnologia->status, ['rejected', 'approved']);
+        $isRevisor = $user->role === 'revisor' && $tecnologia->status === 'approved';
+
+        if (!$isEditorOwner && !$isRevisor) {
+            abort(403);
+        }
+
+        $tecnologia->delete();
+
+        return back();
+    }
+
     public function aprobar(Tecnologia $tecnologia)
     {
         $tecnologia->status = 'approved';
@@ -79,3 +129,4 @@ class TecnologiaController extends Controller
         return back();
     }
 }
+
