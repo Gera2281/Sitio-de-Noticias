@@ -9,16 +9,16 @@ class DeporteController extends Controller
 {
     public function index()
     {
-        if (auth()->check()) {
+        if (auth()->check()) {                                  //El usuario inicio sesion
             $role = auth()->user()->role;
-            if ($role == 'revisor') {
+            if ($role == 'revisor') {                           // El Revisor ve las noticias pendientes de aprobación y las ya aprobadas
                 $deportes = Deporte::whereIn('status', ['pending', 'approved'])->get();
-            } elseif ($role == 'editor') {
+            } elseif ($role == 'editor') {                      //Si el usuario es editor ve sus noticias rechazadas y todas las aprobadas
                 $deportes = Deporte::where('user_id', auth()->id())->orWhere('status', 'approved')->get();
-            } else {
+            } else {                                            // Cualquier otro rol solo ve noticias aprobadas
                 $deportes = Deporte::where('status', 'approved')->get();
             }
-        } else {
+        } else {                                                // Si es un visitante sin registrarse solo ve noticias aprobadas
             $deportes = Deporte::where('status', 'approved')->get();
         }
 
@@ -32,7 +32,7 @@ class DeporteController extends Controller
 
     public function store(Request $request)
     {
-        $request->validate([
+        $request->validate([ //Valida que los campos requeridos
             'titulo'      => 'required|string|max:150',
             'descripcion' => 'required|string|max:255',
             'contenido'   => 'required|string',
@@ -40,15 +40,15 @@ class DeporteController extends Controller
         ]);
 
         $deporte = new Deporte();
-        if ($request->hasFile('imagen')) {
+        if ($request->hasFile('imagen')) { //Si subieron una imagen, la guarda en la carpeta pública
             $path = $request->file('imagen')->store('images', 'public');
             $deporte->imagen = $path;
         }
-        $deporte->titulo      = $request->titulo;
+        $deporte->titulo      = $request->titulo;         //Asigna los valores al objeto
         $deporte->descripcion = $request->descripcion;
         $deporte->contenido   = $request->contenido;
-        $deporte->user_id     = auth()->id();
-        $deporte->status      = 'pending';
+        $deporte->user_id     = auth()->id();         //Guarda quién la escribió
+        $deporte->status      = 'pending';        //Empieza con estado pendiente para que el Revisor la revise
         $deporte->save();
 
         return redirect()->route('deportes.index');
@@ -56,9 +56,9 @@ class DeporteController extends Controller
 
     public function show(Deporte $deporte)
     {
-        // Solo mostrar si estÃ¡ aprobado o si el usuario es editor/revisor
+        // Solo mostrar si esta aprobado o si el usuario es editor/revisor
         if ($deporte->status !== 'approved' && (!auth()->check() || (auth()->user()->role !== 'editor' && auth()->user()->role !== 'revisor'))) {
-            abort(404);
+            abort(404); //error 404 (No encontrado)
         }
 
         return view('deportes.show', compact('deporte'));
@@ -66,9 +66,9 @@ class DeporteController extends Controller
 
     public function edit(Deporte $deporte)
     {
-        // Solo el editor dueÃ±o puede editar una noticia rechazada
+        // Solo el editor dueño puede editar una noticia rechazada
         if ($deporte->status !== 'rejected' || $deporte->user_id !== auth()->id()) {
-            abort(403);
+            abort(403); //error 403 (No autorizado)
         }
 
         return view('deportes.edit', compact('deporte'));
@@ -76,9 +76,9 @@ class DeporteController extends Controller
 
     public function update(Request $request, Deporte $deporte)
     {
-        // Solo el editor dueÃ±o puede actualizar una noticia rechazada
+        // Solo el editor dueño puede actualizar una noticia rechazada
         if ($deporte->status !== 'rejected' || $deporte->user_id !== auth()->id()) {
-            abort(403);
+            abort(403); //error 403 (No autorizado)
         }
 
         $request->validate([
@@ -95,13 +95,13 @@ class DeporteController extends Controller
         $deporte->titulo      = $request->titulo;
         $deporte->descripcion = $request->descripcion;
         $deporte->contenido   = $request->contenido;
-        $deporte->status      = 'pending'; // Vuelve a revisiÃ³n
+        $deporte->status      = 'pending'; // Vuelve a revisión
         $deporte->save();
 
         return redirect()->route('deportes.index');
     }
 
-    public function destroy(Deporte $deporte)
+    public function destroy(Deporte $deporte) //El editor puede borrar sus noticias rechazadas y el revisor puede borrar las aprobadas
     {
         $user = auth()->user();
         $isEditorOwner = $user->role === 'editor' && $deporte->user_id === $user->id && $deporte->status === 'rejected';
@@ -116,7 +116,7 @@ class DeporteController extends Controller
         return back();
     }
 
-    public function aprobar(Deporte $deporte)
+    public function aprobar(Deporte $deporte) //Lo aprueba el revisor
     {
         $deporte->status = 'approved';
         $deporte->save();
@@ -124,7 +124,7 @@ class DeporteController extends Controller
         return back();
     }
 
-    public function rechazar(Deporte $deporte)
+    public function rechazar(Deporte $deporte) //Lo rechaza el revisor
     {
         $deporte->status = 'rejected';
         $deporte->save();
@@ -132,4 +132,3 @@ class DeporteController extends Controller
         return back();
     }
 }
-
