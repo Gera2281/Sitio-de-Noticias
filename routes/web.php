@@ -9,19 +9,19 @@ use App\Http\Controllers\ClimaController;
 use App\Http\Controllers\LocalController;
 use Illuminate\Support\Facades\Route;
 
-// â”€â”€â”€ Perfil â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+//Perfil 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
-require __DIR__.'/auth.php';
+require __DIR__ . '/auth.php';
 
-// â”€â”€â”€ Inicio â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+//Inicio
 Route::get('/', [InicioController::class, 'index'])->name('inicio');
 
-// â”€â”€â”€ Deportes â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// Deportes
 Route::get('/deportes', [DeporteController::class, 'index'])->name('deportes.index');
 Route::get('/deportes/{deporte}', [DeporteController::class, 'show'])->name('deportes.show');
 
@@ -37,7 +37,7 @@ Route::middleware(['auth', 'role:revisor'])->group(function () {
     Route::patch('/deportes/{deporte}/rechazar', [DeporteController::class, 'rechazar'])->name('deportes.rechazar');
 });
 
-// â”€â”€â”€ TecnologÃ­a â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+//Tecnología 
 Route::get('/tecnologia', [TecnologiaController::class, 'index'])->name('tecnologia.index');
 Route::get('/tecnologia/{tecnologia}', [TecnologiaController::class, 'show'])->name('tecnologia.show');
 
@@ -53,7 +53,7 @@ Route::middleware(['auth', 'role:revisor'])->group(function () {
     Route::patch('/tecnologia/{tecnologia}/rechazar', [TecnologiaController::class, 'rechazar'])->name('tecnologia.rechazar');
 });
 
-// â”€â”€â”€ Internacionales â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+//Internacionales
 Route::get('/internacionales', [InternacionalController::class, 'index'])->name('internacionales.index');
 Route::get('/internacionales/{internacional}', [InternacionalController::class, 'show'])->name('internacionales.show');
 
@@ -69,7 +69,7 @@ Route::middleware(['auth', 'role:revisor'])->group(function () {
     Route::patch('/internacionales/{internacional}/rechazar', [InternacionalController::class, 'rechazar'])->name('internacionales.rechazar');
 });
 
-// â”€â”€â”€ Clima â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+//Clima
 Route::get('/clima', [ClimaController::class, 'index'])->name('clima.index');
 Route::get('/clima/{clima}', [ClimaController::class, 'show'])->name('clima.show');
 
@@ -85,7 +85,7 @@ Route::middleware(['auth', 'role:revisor'])->group(function () {
     Route::patch('/clima/{clima}/rechazar', [ClimaController::class, 'rechazar'])->name('clima.rechazar');
 });
 
-// â”€â”€â”€ Locales â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+//Locales
 Route::get('/locales', [LocalController::class, 'index'])->name('locales.index');
 Route::get('/locales/{local}', [LocalController::class, 'show'])->name('locales.show');
 
