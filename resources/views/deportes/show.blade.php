@@ -9,7 +9,7 @@
     <h1>{{ $deporte->titulo }}</h1>
     <p class="text-muted">Publicado el {{ $deporte->created_at->format('d/m/Y') }} por {{ $deporte->user->name ?? 'Anónimo' }}</p>
 
-    {{-- Fila superior: imagen izquierda + descripción derecha --}}
+    {{-- Imagen izquierda + descripción derecha --}}
     <div class="row mb-4">
         @if($deporte->imagen)
         <div class="col-md-6">
