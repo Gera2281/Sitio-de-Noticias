@@ -6,8 +6,10 @@ use Illuminate\Database\Eloquent\Model;
 
 class Tecnologia extends Model
 {
+    // Define el nombre de la tabla en la base de datos
     protected $table = 'tecnologia';
 
+    // Campos del modelo habilitados
     protected $fillable = [
         'imagen',
         'titulo',
@@ -17,6 +19,7 @@ class Tecnologia extends Model
         'status',
     ];
 
+    // Relacion:(Creador/Editor)
     public function user()
     {
         return $this->belongsTo(User::class);

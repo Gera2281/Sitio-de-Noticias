@@ -13,7 +13,7 @@ class User extends Authenticatable
     use HasFactory, Notifiable;
 
     /**
-     * The attributes that are mass assignable.
+     * Campos del modelo que pueden ser asignados masivamente
      *
      * @var list<string>
      */
@@ -22,11 +22,11 @@ class User extends Authenticatable
         'email',
         'especialidad',
         'password',
-        'role',
+        'role', // Rol de usuario (ej. editor, revisor)
     ];
 
     /**
-     * The attributes that should be hidden for serialization.
+     * Campos que deben ocultarse cuando el modelo es convertido a JSON o arreglos (Seguridad)
      *
      * @var list<string>
      */
@@ -36,7 +36,7 @@ class User extends Authenticatable
     ];
 
     /**
-     * Get the attributes that should be cast.
+     * Conversión o "casteo" automático de tipos de atributos al recuperarlos de la base de datos
      *
      * @return array<string, string>
      */
@@ -44,7 +44,7 @@ class User extends Authenticatable
     {
         return [
             'email_verified_at' => 'datetime',
-            'password' => 'hashed',
+            'password' => 'hashed', // Las contraseñas se hashean automáticamente
         ];
     }
 }
