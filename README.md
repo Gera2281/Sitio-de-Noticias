@@ -459,4 +459,4 @@ Sitio-de-Noticias/
 
 ## 📝 Licencia
 
-Este proyecto fue desarrollado como trabajo académico para la materia de Desarrollo de Aplicaciones Web.
+Este proyecto fue desarrollado como trabajo académico para la materia de Programacion Web Avanzada.
