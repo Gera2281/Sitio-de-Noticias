@@ -4,21 +4,22 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Local;
+use Illuminate\Support\Facades\Auth;
 
 class LocalController extends Controller
 {
     public function index()
     {
-        if (auth()->check()) {
-            $role = auth()->user()->role;
-            if ($role == 'revisor') {
+        if (Auth::check()) {                                  // El usuario inicio sesión
+            $role = Auth::user()->role;
+            if ($role == 'revisor') {                           // El Revisor ve las noticias pendientes de aprobación y las ya aprobadas
                 $locales = Local::whereIn('status', ['pending', 'approved'])->get();
-            } elseif ($role == 'editor') {
-                $locales = Local::where('user_id', auth()->id())->orWhere('status', 'approved')->get();
-            } else {
+            } elseif ($role == 'editor') {                      // Si el usuario es editor, ve sus noticias y todas las aprobadas
+                $locales = Local::where('user_id', Auth::id())->orWhere('status', 'approved')->get();
+            } else {                                            // Cualquier otro rol solo ve noticias aprobadas
                 $locales = Local::where('status', 'approved')->get();
             }
-        } else {
+        } else {                                                // Si es un visitante sin registrarse, solo ve noticias aprobadas
             $locales = Local::where('status', 'approved')->get();
         }
 
@@ -27,11 +28,13 @@ class LocalController extends Controller
 
     public function create()
     {
+        // Muestra el formulario para crear una nueva noticia local
         return view('locales.create');
     }
 
     public function store(Request $request)
     {
+        // Valida que los campos requeridos estén llenos y correctos
         $request->validate([
             'titulo'      => 'required|string|max:150',
             'descripcion' => 'required|string|max:255',
@@ -40,15 +43,15 @@ class LocalController extends Controller
         ]);
 
         $local = new Local();
-        if ($request->hasFile('imagen')) {
+        if ($request->hasFile('imagen')) { // Si subieron una imagen, la guarda en la carpeta pública
             $path = $request->file('imagen')->store('images', 'public');
             $local->imagen = $path;
         }
-        $local->titulo      = $request->titulo;
+        $local->titulo      = $request->titulo;         // Asigna los valores al objeto
         $local->descripcion = $request->descripcion;
         $local->contenido   = $request->contenido;
-        $local->user_id     = auth()->id();
-        $local->status      = 'pending';
+        $local->user_id     = Auth::id();         // Guarda quién la escribió
+        $local->status      = 'pending';        // Empieza con estado pendiente para que el Revisor la revise
         $local->save();
 
         return redirect()->route('locales.index');
@@ -56,8 +59,9 @@ class LocalController extends Controller
 
     public function show(Local $local)
     {
-        if ($local->status !== 'approved' && (!auth()->check() || (auth()->user()->role !== 'editor' && auth()->user()->role !== 'revisor'))) {
-            abort(404);
+        // Solo mostrar si está aprobado o si el usuario es editor/revisor
+        if ($local->status !== 'approved' && (!Auth::check() || (Auth::user()->role !== 'editor' && Auth::user()->role !== 'revisor'))) {
+            abort(404); // Error 404 (No encontrado)
         }
 
         return view('locales.show', compact('local'));
@@ -65,8 +69,9 @@ class LocalController extends Controller
 
     public function edit(Local $local)
     {
-        if ($local->status !== 'rejected' || $local->user_id !== auth()->id()) {
-            abort(403);
+        // Solo el editor dueño puede editar una noticia rechazada
+        if ($local->status !== 'rejected' || $local->user_id !== Auth::id()) {
+            abort(403); // Error 403 (No autorizado)
         }
 
         return view('locales.edit', compact('local'));
@@ -74,8 +79,9 @@ class LocalController extends Controller
 
     public function update(Request $request, Local $local)
     {
-        if ($local->status !== 'rejected' || $local->user_id !== auth()->id()) {
-            abort(403);
+        // Solo el editor dueño puede actualizar una noticia rechazada
+        if ($local->status !== 'rejected' || $local->user_id !== Auth::id()) {
+            abort(403); // Error 403 (No autorizado)
         }
 
         $request->validate([
@@ -92,15 +98,15 @@ class LocalController extends Controller
         $local->titulo      = $request->titulo;
         $local->descripcion = $request->descripcion;
         $local->contenido   = $request->contenido;
-        $local->status      = 'pending';
+        $local->status      = 'pending'; // Vuelve a revisión
         $local->save();
 
         return redirect()->route('locales.index');
     }
 
-    public function destroy(Local $local)
+    public function destroy(Local $local) // El editor puede borrar sus noticias rechazadas y el revisor puede borrar las aprobadas
     {
-        $user = auth()->user();
+        $user = Auth::user();
         $isEditorOwner = $user->role === 'editor' && $local->user_id === $user->id && $local->status === 'rejected';
         $isRevisor = $user->role === 'revisor' && $local->status === 'approved';
 
@@ -113,7 +119,7 @@ class LocalController extends Controller
         return back();
     }
 
-    public function aprobar(Local $local)
+    public function aprobar(Local $local) // Lo aprueba el revisor
     {
         $local->status = 'approved';
         $local->save();
@@ -121,7 +127,7 @@ class LocalController extends Controller
         return back();
     }
 
-    public function rechazar(Local $local)
+    public function rechazar(Local $local) // Lo rechaza el revisor
     {
         $local->status = 'rejected';
         $local->save();

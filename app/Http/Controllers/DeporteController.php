@@ -4,17 +4,18 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Deporte;
+use Illuminate\Support\Facades\Auth;
 
 class DeporteController extends Controller
 {
     public function index()
     {
-        if (auth()->check()) {                                  //El usuario inicio sesion
-            $role = auth()->user()->role;
+        if (Auth::check()) {                                  //El usuario inicio sesion
+            $role = Auth::user()->role;
             if ($role == 'revisor') {                           // El Revisor ve las noticias pendientes de aprobación y las ya aprobadas
                 $deportes = Deporte::whereIn('status', ['pending', 'approved'])->get();
             } elseif ($role == 'editor') {                      //Si el usuario es editor ve sus noticias rechazadas y todas las aprobadas
-                $deportes = Deporte::where('user_id', auth()->id())->orWhere('status', 'approved')->get();
+                $deportes = Deporte::where('user_id', Auth::id())->orWhere('status', 'approved')->get();
             } else {                                            // Cualquier otro rol solo ve noticias aprobadas
                 $deportes = Deporte::where('status', 'approved')->get();
             }
@@ -47,7 +48,7 @@ class DeporteController extends Controller
         $deporte->titulo      = $request->titulo;         //Asigna los valores al objeto
         $deporte->descripcion = $request->descripcion;
         $deporte->contenido   = $request->contenido;
-        $deporte->user_id     = auth()->id();         //Guarda quién la escribió
+        $deporte->user_id     = Auth::id();         //Guarda quién la escribió
         $deporte->status      = 'pending';        //Empieza con estado pendiente para que el Revisor la revise
         $deporte->save();
 
@@ -57,7 +58,7 @@ class DeporteController extends Controller
     public function show(Deporte $deporte)
     {
         // Solo mostrar si esta aprobado o si el usuario es editor/revisor
-        if ($deporte->status !== 'approved' && (!auth()->check() || (auth()->user()->role !== 'editor' && auth()->user()->role !== 'revisor'))) {
+        if ($deporte->status !== 'approved' && (!Auth::check() || (Auth::user()->role !== 'editor' && Auth::user()->role !== 'revisor'))) {
             abort(404); //error 404 (No encontrado)
         }
 
@@ -67,7 +68,7 @@ class DeporteController extends Controller
     public function edit(Deporte $deporte)
     {
         // Solo el editor dueño puede editar una noticia rechazada
-        if ($deporte->status !== 'rejected' || $deporte->user_id !== auth()->id()) {
+        if ($deporte->status !== 'rejected' || $deporte->user_id !== Auth::id()) {
             abort(403); //error 403 (No autorizado)
         }
 
@@ -77,7 +78,7 @@ class DeporteController extends Controller
     public function update(Request $request, Deporte $deporte)
     {
         // Solo el editor dueño puede actualizar una noticia rechazada
-        if ($deporte->status !== 'rejected' || $deporte->user_id !== auth()->id()) {
+        if ($deporte->status !== 'rejected' || $deporte->user_id !== Auth::id()) {
             abort(403); //error 403 (No autorizado)
         }
 
@@ -103,7 +104,7 @@ class DeporteController extends Controller
 
     public function destroy(Deporte $deporte) //El editor puede borrar sus noticias rechazadas y el revisor puede borrar las aprobadas
     {
-        $user = auth()->user();
+        $user = Auth::user();
         $isEditorOwner = $user->role === 'editor' && $deporte->user_id === $user->id && $deporte->status === 'rejected';
         $isRevisor = $user->role === 'revisor' && $deporte->status === 'approved';
 
