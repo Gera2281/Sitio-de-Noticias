@@ -2,22 +2,28 @@
 @section('titulo', 'Tecnologia')
 
 @section('contenido')
-<div class="d-flex justify-content-between align-items-center mb-4">
-    <h2 class="mb-0">ULTIMAS NOTICIAS TECNOLOGICAS</h2>
+{{-- Encabezado y botón para crear noticia si es editor --}}
+<div class="d-flex justify-content-between align-items-center mb-4 border-bottom border-3 border-primary pb-2">
+    <h2 class="mb-0 fw-bold text-primary text-uppercase">Últimas Noticias Tecnológicas</h2>
     @if(auth()->check() && auth()->user()->role === 'editor')
         <a href="{{ route('tecnologia.create') }}" class="btn btn-primary mb-2 ">Crear Noticia</a>
     @endif
 </div>
+
+    {{-- Listado de noticias de tecnología --}}
     <div class="row g-3">
         @foreach ($tecnologia as $tecnologica)
         <div class="col-6 col-md-4 col-lg-3">
+            {{-- Componente de la tarjeta de tecnología --}}
             @component('layouts.componentes.cardtecnologia')
             @slot('image', $tecnologica->imagen)
             @slot('title', $tecnologica->titulo)
             @slot('content', $tecnologica->descripcion)
             @slot('link', route('tecnologia.show', $tecnologica))
             @endcomponent
-                        @if(auth()->check() && auth()->user()->role === 'revisor')
+
+            {{-- Acciones para el rol de revisor: Aprobar, Rechazar o Eliminar --}}
+            @if(auth()->check() && auth()->user()->role === 'revisor')
                 @if($tecnologica->status === 'pending')
                     <form action="{{ route('tecnologia.aprobar', $tecnologica) }}" method="POST" class="d-inline">
                         @csrf
@@ -37,6 +43,8 @@
                     </form>
                 @endif
             @endif
+
+            {{-- Acciones para el autor editor si la noticia fue rechazada: Editar o Eliminar --}}
             @if(auth()->check() && auth()->user()->role === 'editor' && $tecnologica->user_id === auth()->id())
                 @if($tecnologica->status === 'rejected')
                 <div class="mt-2 p-2 border border-danger rounded bg-danger bg-opacity-10">

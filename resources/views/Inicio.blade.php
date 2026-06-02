@@ -91,7 +91,7 @@
 
 <div class="container marketing mt-5">
     {{-- Noticias Deportivas --}}
-    <h2 class="text-center mb-4">Deportes</h2>
+    <h2 class="fw-bold pb-2 mb-4 border-bottom border-3 border-danger text-danger">Deportes</h2>
     <div class="row g-3 mb-5">
         @forelse ($deportes as $deporte)
         <div class="col-6 col-md-4 col-lg-4">
@@ -110,7 +110,7 @@
     <hr class="featurette-divider">
 
     {{-- Noticias de Tecnología --}}
-    <h2 class="text-center mb-4">Tecnología</h2>
+    <h2 class="fw-bold pb-2 mb-4 border-bottom border-3 border-primary text-primary">Tecnología</h2>
     <div class="row g-3 mb-5">
         @forelse ($tecnologia as $tech)
         <div class="col-6 col-md-4 col-lg-4">
@@ -129,7 +129,7 @@
     <hr class="featurette-divider">
 
     {{-- Noticias Internacionales --}}
-    <h2 class="text-center mb-4">Internacionales</h2>
+    <h2 class="fw-bold pb-2 mb-4 border-bottom border-3 border-secondary text-secondary">Internacionales</h2>
     <div class="row g-3 mb-5">
         @forelse ($internacionales as $inter)
         <div class="col-6 col-md-4 col-lg-4">
@@ -148,7 +148,7 @@
     <hr class="featurette-divider">
 
     {{-- Noticias de Clima --}}
-    <h2 class="text-center mb-4">Clima</h2>
+    <h2 class="fw-bold pb-2 mb-4 border-bottom border-3 border-info text-info">Clima</h2>
     <div class="row g-3 mb-5">
         @forelse ($clima as $cl)
         <div class="col-6 col-md-4 col-lg-4">
@@ -167,7 +167,7 @@
     <hr class="featurette-divider">
 
     {{-- Noticias Locales --}}
-    <h2 class="text-center mb-4">Locales</h2>
+    <h2 class="fw-bold pb-2 mb-4 border-bottom border-3 border-success text-success">Locales</h2>
     <div class="row g-3 mb-5">
         @forelse ($locales as $local)
         <div class="col-6 col-md-4 col-lg-4">

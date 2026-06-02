@@ -18,6 +18,7 @@
             height: 280px;
         }
 
+        /* Desplazamien to hacia arriba de las tarjetas */
         .news-card:hover {
             transform: translateY(-6px);
             box-shadow: 0 12px 32px rgba(0, 0, 0, 0.28);
@@ -34,6 +35,7 @@
             /* Usamos variable para evitar errores de sintaxis en el HTML */
         }
 
+        /*Zoom de la card */
         .news-card:hover .news-card-img {
             transform: scale(1.04);
         }
