@@ -57,8 +57,8 @@ class DeporteController extends Controller
 
     public function show(Deporte $deporte)
     {
-        // Solo mostrar si esta aprobado o si el usuario es editor/revisor
-        if ($deporte->status !== 'approved' && (!Auth::check() || (Auth::user()->role !== 'editor' && Auth::user()->role !== 'revisor'))) {
+        // Usa la Policy para determinar si se puede ver la noticia, manteniendo el comportamiento de retornar 404
+        if (Auth::user() ? Auth::user()->cannot('view', $deporte) : $deporte->status !== 'approved') {
             abort(404); //error 404 (No encontrado)
         }
 
@@ -67,20 +67,16 @@ class DeporteController extends Controller
 
     public function edit(Deporte $deporte)
     {
-        // Solo el editor dueño puede editar una noticia rechazada
-        if ($deporte->status !== 'rejected' || $deporte->user_id !== Auth::id()) {
-            abort(403); //error 403 (No autorizado)
-        }
+        // Autoriza la edición usando la Policy (retorna 403 si no está autorizado)
+        $this->authorize('update', $deporte);
 
         return view('deportes.edit', compact('deporte'));
     }
 
     public function update(Request $request, Deporte $deporte)
     {
-        // Solo el editor dueño puede actualizar una noticia rechazada
-        if ($deporte->status !== 'rejected' || $deporte->user_id !== Auth::id()) {
-            abort(403); //error 403 (No autorizado)
-        }
+        // Autoriza la actualización usando la Policy
+        $this->authorize('update', $deporte);
 
         $request->validate([
             'titulo'      => 'required|string|max:150',
@@ -102,31 +98,32 @@ class DeporteController extends Controller
         return redirect()->route('deportes.index');
     }
 
-    public function destroy(Deporte $deporte) //El editor puede borrar sus noticias rechazadas y el revisor puede borrar las aprobadas
+    public function destroy(Deporte $deporte)
     {
-        $user = Auth::user();
-        $isEditorOwner = $user->role === 'editor' && $deporte->user_id === $user->id && $deporte->status === 'rejected';
-        $isRevisor = $user->role === 'revisor' && $deporte->status === 'approved';
-
-        if (!$isEditorOwner && !$isRevisor) {
-            abort(403);
-        }
+        // Autoriza la eliminación usando la Policy
+        $this->authorize('delete', $deporte);
 
         $deporte->delete();
 
         return back();
     }
 
-    public function aprobar(Deporte $deporte) //Lo aprueba el revisor
+    public function aprobar(Deporte $deporte)
     {
+        // Autoriza la revisión usando la Policy
+        $this->authorize('review', $deporte);
+
         $deporte->status = 'approved';
         $deporte->save();
 
         return back();
     }
 
-    public function rechazar(Deporte $deporte) //Lo rechaza el revisor
+    public function rechazar(Deporte $deporte)
     {
+        // Autoriza la revisión usando la Policy
+        $this->authorize('review', $deporte);
+
         $deporte->status = 'rejected';
         $deporte->save();
 

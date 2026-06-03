@@ -59,8 +59,8 @@ class ClimaController extends Controller
 
     public function show(Clima $clima)
     {
-        // Solo mostrar si está aprobado o si el usuario es editor/revisor
-        if ($clima->status !== 'approved' && (!Auth::check() || (Auth::user()->role !== 'editor' && Auth::user()->role !== 'revisor'))) {
+        // Usa la Policy para determinar si se puede ver la noticia, manteniendo el comportamiento de retornar 404
+        if (Auth::user() ? Auth::user()->cannot('view', $clima) : $clima->status !== 'approved') {
             abort(404); // Error 404 (No encontrado)
         }
 
@@ -69,20 +69,16 @@ class ClimaController extends Controller
 
     public function edit(Clima $clima)
     {
-        // Solo el editor dueño puede editar una noticia rechazada
-        if ($clima->status !== 'rejected' || $clima->user_id !== Auth::id()) {
-            abort(403); // Error 403 (No autorizado)
-        }
+        // Autoriza la edición usando la Policy
+        $this->authorize('update', $clima);
 
         return view('clima.edit', compact('clima'));
     }
 
     public function update(Request $request, Clima $clima)
     {
-        // Solo el editor dueño puede actualizar una noticia rechazada
-        if ($clima->status !== 'rejected' || $clima->user_id !== Auth::id()) {
-            abort(403); // Error 403 (No autorizado)
-        }
+        // Autoriza la actualización usando la Policy
+        $this->authorize('update', $clima);
 
         $request->validate([
             'titulo'      => 'required|string|max:150',
@@ -104,31 +100,32 @@ class ClimaController extends Controller
         return redirect()->route('clima.index');
     }
 
-    public function destroy(Clima $clima) // El editor puede borrar sus noticias rechazadas y el revisor puede borrar las aprobadas
+    public function destroy(Clima $clima)
     {
-        $user = Auth::user();
-        $isEditorOwner = $user->role === 'editor' && $clima->user_id === $user->id && in_array($clima->status, ['rejected', 'approved']);
-        $isRevisor = $user->role === 'revisor' && $clima->status === 'approved';
-
-        if (!$isEditorOwner && !$isRevisor) {
-            abort(403);
-        }
+        // Autoriza la eliminación usando la Policy
+        $this->authorize('delete', $clima);
 
         $clima->delete();
 
         return back();
     }
 
-    public function aprobar(Clima $clima) // Lo aprueba el revisor
+    public function aprobar(Clima $clima)
     {
+        // Autoriza la revisión usando la Policy
+        $this->authorize('review', $clima);
+
         $clima->status = 'approved';
         $clima->save();
 
         return back();
     }
 
-    public function rechazar(Clima $clima) // Lo rechaza el revisor
+    public function rechazar(Clima $clima)
     {
+        // Autoriza la revisión usando la Policy
+        $this->authorize('review', $clima);
+
         $clima->status = 'rejected';
         $clima->save();
 

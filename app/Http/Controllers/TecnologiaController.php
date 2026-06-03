@@ -59,8 +59,8 @@ class TecnologiaController extends Controller
 
     public function show(Tecnologia $tecnologia)
     {
-        // Solo mostrar si está aprobado o si el usuario es editor/revisor
-        if ($tecnologia->status !== 'approved' && (!Auth::check() || (Auth::user()->role !== 'editor' && Auth::user()->role !== 'revisor'))) {
+        // Usa la Policy para determinar si se puede ver la noticia, manteniendo el comportamiento de retornar 404
+        if (Auth::user() ? Auth::user()->cannot('view', $tecnologia) : $tecnologia->status !== 'approved') {
             abort(404); // Error 404 (No encontrado)
         }
 
@@ -69,20 +69,16 @@ class TecnologiaController extends Controller
 
     public function edit(Tecnologia $tecnologia)
     {
-        // Solo el editor dueño puede editar una noticia rechazada
-        if ($tecnologia->status !== 'rejected' || $tecnologia->user_id !== Auth::id()) {
-            abort(403); // Error 403 (No autorizado)
-        }
+        // Autoriza la edición usando la Policy
+        $this->authorize('update', $tecnologia);
 
         return view('tecnologia.edit', compact('tecnologia'));
     }
 
     public function update(Request $request, Tecnologia $tecnologia)
     {
-        // Solo el editor dueño puede actualizar una noticia rechazada
-        if ($tecnologia->status !== 'rejected' || $tecnologia->user_id !== Auth::id()) {
-            abort(403); // Error 403 (No autorizado)
-        }
+        // Autoriza la actualización usando la Policy
+        $this->authorize('update', $tecnologia);
 
         $request->validate([
             'titulo'      => 'required|string|max:150',
@@ -104,31 +100,32 @@ class TecnologiaController extends Controller
         return redirect()->route('tecnologia.index');
     }
 
-    public function destroy(Tecnologia $tecnologia) // El editor puede borrar sus noticias rechazadas y el revisor puede borrar las aprobadas
+    public function destroy(Tecnologia $tecnologia)
     {
-        $user = Auth::user();
-        $isEditorOwner = $user->role === 'editor' && $tecnologia->user_id === $user->id && in_array($tecnologia->status, ['rejected', 'approved']);
-        $isRevisor = $user->role === 'revisor' && $tecnologia->status === 'approved';
-
-        if (!$isEditorOwner && !$isRevisor) {
-            abort(403);
-        }
+        // Autoriza la eliminación usando la Policy
+        $this->authorize('delete', $tecnologia);
 
         $tecnologia->delete();
 
         return back();
     }
 
-    public function aprobar(Tecnologia $tecnologia) // Lo aprueba el revisor
+    public function aprobar(Tecnologia $tecnologia)
     {
+        // Autoriza la revisión usando la Policy
+        $this->authorize('review', $tecnologia);
+
         $tecnologia->status = 'approved';
         $tecnologia->save();
 
         return back();
     }
 
-    public function rechazar(Tecnologia $tecnologia) // Lo rechaza el revisor
+    public function rechazar(Tecnologia $tecnologia)
     {
+        // Autoriza la revisión usando la Policy
+        $this->authorize('review', $tecnologia);
+
         $tecnologia->status = 'rejected';
         $tecnologia->save();
 

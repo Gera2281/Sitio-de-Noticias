@@ -59,8 +59,8 @@ class LocalController extends Controller
 
     public function show(Local $local)
     {
-        // Solo mostrar si está aprobado o si el usuario es editor/revisor
-        if ($local->status !== 'approved' && (!Auth::check() || (Auth::user()->role !== 'editor' && Auth::user()->role !== 'revisor'))) {
+        // Usa la Policy para determinar si se puede ver la noticia, manteniendo el comportamiento de retornar 404
+        if (Auth::user() ? Auth::user()->cannot('view', $local) : $local->status !== 'approved') {
             abort(404); // Error 404 (No encontrado)
         }
 
@@ -69,20 +69,16 @@ class LocalController extends Controller
 
     public function edit(Local $local)
     {
-        // Solo el editor dueño puede editar una noticia rechazada
-        if ($local->status !== 'rejected' || $local->user_id !== Auth::id()) {
-            abort(403); // Error 403 (No autorizado)
-        }
+        // Autoriza la edición usando la Policy
+        $this->authorize('update', $local);
 
         return view('locales.edit', compact('local'));
     }
 
     public function update(Request $request, Local $local)
     {
-        // Solo el editor dueño puede actualizar una noticia rechazada
-        if ($local->status !== 'rejected' || $local->user_id !== Auth::id()) {
-            abort(403); // Error 403 (No autorizado)
-        }
+        // Autoriza la actualización usando la Policy
+        $this->authorize('update', $local);
 
         $request->validate([
             'titulo'      => 'required|string|max:150',
@@ -104,31 +100,32 @@ class LocalController extends Controller
         return redirect()->route('locales.index');
     }
 
-    public function destroy(Local $local) // El editor puede borrar sus noticias rechazadas y el revisor puede borrar las aprobadas
+    public function destroy(Local $local)
     {
-        $user = Auth::user();
-        $isEditorOwner = $user->role === 'editor' && $local->user_id === $user->id && $local->status === 'rejected';
-        $isRevisor = $user->role === 'revisor' && $local->status === 'approved';
-
-        if (!$isEditorOwner && !$isRevisor) {
-            abort(403);
-        }
+        // Autoriza la eliminación usando la Policy
+        $this->authorize('delete', $local);
 
         $local->delete();
 
         return back();
     }
 
-    public function aprobar(Local $local) // Lo aprueba el revisor
+    public function aprobar(Local $local)
     {
+        // Autoriza la revisión usando la Policy
+        $this->authorize('review', $local);
+
         $local->status = 'approved';
         $local->save();
 
         return back();
     }
 
-    public function rechazar(Local $local) // Lo rechaza el revisor
+    public function rechazar(Local $local)
     {
+        // Autoriza la revisión usando la Policy
+        $this->authorize('review', $local);
+
         $local->status = 'rejected';
         $local->save();
 

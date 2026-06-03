@@ -58,8 +58,8 @@ class InternacionalController extends Controller
 
     public function show(Internacional $internacional)
     {
-        // Solo mostrar si está aprobado o si el usuario es editor/revisor
-        if ($internacional->status !== 'approved' && (!auth()->check() || (auth()->user()->role !== 'editor' && auth()->user()->role !== 'revisor'))) {
+        // Usa la Policy para determinar si se puede ver la noticia, manteniendo el comportamiento de retornar 404
+        if (auth()->check() ? auth()->user()->cannot('view', $internacional) : $internacional->status !== 'approved') {
             abort(404); // Error 404 (No encontrado)
         }
 
@@ -68,20 +68,16 @@ class InternacionalController extends Controller
 
     public function edit(Internacional $internacional)
     {
-        // Solo el editor dueño puede editar una noticia rechazada
-        if ($internacional->status !== 'rejected' || $internacional->user_id !== auth()->id()) {
-            abort(403); // Error 403 (No autorizado)
-        }
+        // Autoriza la edición usando la Policy
+        $this->authorize('update', $internacional);
 
         return view('internacionales.edit', compact('internacional'));
     }
 
     public function update(Request $request, Internacional $internacional)
     {
-        // Solo el editor dueño puede actualizar una noticia rechazada
-        if ($internacional->status !== 'rejected' || $internacional->user_id !== auth()->id()) {
-            abort(403); // Error 403 (No autorizado)
-        }
+        // Autoriza la actualización usando la Policy
+        $this->authorize('update', $internacional);
 
         $request->validate([
             'titulo'      => 'required|string|max:150',
@@ -103,31 +99,32 @@ class InternacionalController extends Controller
         return redirect()->route('internacionales.index');
     }
 
-    public function destroy(Internacional $internacional) // El editor puede borrar sus noticias rechazadas y el revisor puede borrar las aprobadas
+    public function destroy(Internacional $internacional)
     {
-        $user = auth()->user();
-        $isEditorOwner = $user->role === 'editor' && $internacional->user_id === $user->id && $internacional->status === 'rejected';
-        $isRevisor = $user->role === 'revisor' && $internacional->status === 'approved';
-
-        if (!$isEditorOwner && !$isRevisor) {
-            abort(403);
-        }
+        // Autoriza la eliminación usando la Policy
+        $this->authorize('delete', $internacional);
 
         $internacional->delete();
 
         return back();
     }
 
-    public function aprobar(Internacional $internacional) // Lo aprueba el revisor
+    public function aprobar(Internacional $internacional)
     {
+        // Autoriza la revisión usando la Policy
+        $this->authorize('review', $internacional);
+
         $internacional->status = 'approved';
         $internacional->save();
 
         return back();
     }
 
-    public function rechazar(Internacional $internacional) // Lo rechaza el revisor
+    public function rechazar(Internacional $internacional)
     {
+        // Autoriza la revisión usando la Policy
+        $this->authorize('review', $internacional);
+
         $internacional->status = 'rejected';
         $internacional->save();
 
