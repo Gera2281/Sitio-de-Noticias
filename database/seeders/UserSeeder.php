@@ -12,7 +12,7 @@ class UserSeeder extends Seeder
      */
     public function run(): void
     {
-        // Crear un usuario Espectador por defecto para pruebas
+        // Crear un usuario Espectador 
         \App\Models\User::factory()->create([
             'name' => 'Espectador',
             'email' => 'espectador@example.com',
@@ -20,7 +20,7 @@ class UserSeeder extends Seeder
             'role' => 'espectador',
         ]);
 
-        // Crear un usuario Editor por defecto para pruebas
+        // Crear un usuario Editor 
         \App\Models\User::factory()->create([
             'name' => 'Editor',
             'email' => 'editor@example.com',
@@ -28,7 +28,7 @@ class UserSeeder extends Seeder
             'role' => 'editor',
         ]);
 
-        // Crear un usuario Revisor por defecto para pruebas
+        // Crear un usuario Revisor 
         \App\Models\User::factory()->create([
             'name' => 'Revisor',
             'email' => 'revisor@example.com',
